@@ -1,11 +1,18 @@
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Envelope;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 public class RPCServer {
 
-    private static final String RPC_QUEUE_NAME = "rabbit_queue";
+    private static final String RPC_QUEUE_NAME = "rabbitBank_queue"; //'g4.xml.reply-to'
 
     public static void main(String[] argv) {
         ConnectionFactory factory = new ConnectionFactory();

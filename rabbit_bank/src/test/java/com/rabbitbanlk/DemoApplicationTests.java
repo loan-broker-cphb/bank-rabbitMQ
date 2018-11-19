@@ -1,4 +1,4 @@
-package bank.demo;
+package com.rabbitbanlk;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

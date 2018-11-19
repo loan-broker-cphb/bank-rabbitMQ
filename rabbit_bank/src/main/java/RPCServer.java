@@ -1,31 +1,48 @@
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
+
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Envelope;
-
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RPCServer {
 
-    private static final String RPC_QUEUE_NAME = "bank.rabbit";
+    private static final String RPC_QUEUE_NAME = "cphbusiness.bankRabbit";
+    private static final String queueName = "bank.rabbit.translator";
+    private static final String exchangeName = "translator.exch";
+    private static final String bankUri = "amqp://guest:guest@datdb.cphbusiness.dk:5672";
+    private final String bankExchange = "cphbusiness.bankRabbit";
 
     public static void main(String[] argv) {
+
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        try {
+            factory.setUri(bankUri);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(RPCServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(RPCServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (KeyManagementException ex) {
+            Logger.getLogger(RPCServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         Connection connection = null;
+
         try {
             connection = factory.newConnection();
             final Channel channel = connection.createChannel();
 
             channel.queueDeclare(RPC_QUEUE_NAME, false, false, false, null);
-
-            channel.basicQos(1);
 
             System.out.println(" [x] Awaiting RPC requests");
 
@@ -44,7 +61,6 @@ public class RPCServer {
                     try {
                         String message = new String(body, "UTF-8");
                         System.out.println("Recived message " + message);
-
                         response = "{\"interestRate\":" + intrest_rate + "}";
 
                     } catch (RuntimeException e) {

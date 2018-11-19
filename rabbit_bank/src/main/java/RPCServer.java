@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 
 public class RPCServer {
 
-    private static final String RPC_QUEUE_NAME = "rabbitBank_queue"; //'g4.xml.reply-to'
+    private static final String RPC_QUEUE_NAME = "rabbitBank_queue";
 
     public static void main(String[] argv) {
         ConnectionFactory factory = new ConnectionFactory();

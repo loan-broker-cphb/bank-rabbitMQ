@@ -1,7 +1,11 @@
 package com.rabbitbank;
 
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.support.converter.ClassMapper;
+import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -27,29 +31,22 @@ public class Application {
     }
 
     @Bean
+    Queue queue() {
+        return new Queue(queueName, true, false, false);
+    }
+
+    @Bean
     RabbitAdmin rabbitAdmin (ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
 
     @Bean
-    MessageConverter messageConverter() {
+    MessageConverter jsonMessageConverter() {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        DefaultClassMapper classMapper = new DefaultClassMapper();
+        classMapper.setDefaultType(MessageRequest.class);
+        converter.setClassMapper(classMapper);
         return converter;
-    }
-
-    @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
-        return container;
-    }
-
-    @Bean
-    MessageListenerAdapter listenerAdapter(MessageReceiver receiver) {
-        return new MessageListenerAdapter(receiver);
     }
 
 }

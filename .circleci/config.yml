@@ -28,7 +28,7 @@ jobs:
         - v1-dependencies-
     - run: mvn clean install -DskipTests
     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-    - run: docker build -t loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH .
+    - run: docker build -t loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH ./rabbit_bank
     - run: docker push loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH
 
     - save_cache:

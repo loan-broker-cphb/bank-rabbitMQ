@@ -1,13 +1,9 @@
-package com.rabbitbanlk;
+package com.rabbitbank;
 
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -41,7 +37,7 @@ public class Application {
         return converter;
     }
 
-        @Bean
+    @Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
                                              MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
@@ -51,7 +47,7 @@ public class Application {
         return container;
     }
 
-        @Bean
+    @Bean
     MessageListenerAdapter listenerAdapter(MessageReceiver receiver) {
         return new MessageListenerAdapter(receiver);
     }

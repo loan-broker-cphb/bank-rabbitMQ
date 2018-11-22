@@ -1,4 +1,4 @@
-package com.rabbitbanlk;
+package com.rabbitbank;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Message;
@@ -16,7 +16,9 @@ import java.util.Random;
 
 @Component
 public class MessageReceiver {
-    private final RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private MessageConverter messageConverter;
@@ -24,8 +26,7 @@ public class MessageReceiver {
     @Autowired
     RabbitAdmin rabbitAdmin;
 
-    public MessageReceiver(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
+    public MessageReceiver() {
     }
 
     public void handleMessage(Message message) {

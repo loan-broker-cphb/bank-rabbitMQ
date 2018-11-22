@@ -23,16 +23,16 @@ jobs:
     # Download and cache dependencies
     - restore_cache:
         keys:
-        - v1-dependencies-{{ checksum "rabbit_bank/pom.xml" }}
+        - v1-dependencies-{{ checksum "pom.xml" }}
         # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
     - run: mvn clean install -DskipTests
     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-    - run: docker build -t loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH ./rabbit_bank
+    - run: docker build -t loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH .
     - run: docker push loanbrokerg4/rabbit-bank:$CIRCLE_BRANCH
 
     - save_cache:
         paths:
         - ~/.m2
-        key: v1-dependencies-{{ checksum "rabbit_bank/pom.xml" }}
+        key: v1-dependencies-{{ checksum "pom.xml" }}
 

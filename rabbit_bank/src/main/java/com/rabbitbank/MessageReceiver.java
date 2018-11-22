@@ -55,6 +55,7 @@ public class MessageReceiver {
         Message responseMessage = jsonMessageConverter.toMessage(responce, properties);
 //        rabbitTemplate.setQueue(replyTo);
         System.out.println(responce.ssn);
+        responseMessage.getMessageProperties().getHeaders().remove("__TypeId__");
         rabbitTemplate.send(replyTo, responseMessage);
 
 //        below goes in Translator
